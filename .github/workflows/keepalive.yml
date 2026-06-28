@@ -3,7 +3,7 @@ name: Keep HF Space Awake
 on:
   schedule:
     # 每 20 分钟跑一次（UTC），HF Spaces 免费版 48 小时休眠，这个频率足够防睡
-    - cron: '*/20 * * * *'
+    - cron: '* * * * *'
   workflow_dispatch:  # 允许手动触发
 
 jobs:
