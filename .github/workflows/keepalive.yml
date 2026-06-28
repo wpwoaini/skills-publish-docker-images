@@ -2,21 +2,25 @@ name: Keep HF Space Awake
 
 on:
   schedule:
-    # 每 20 分钟跑一次（UTC），HF Spaces 免费版 48 小时休眠，这个频率足够防睡
-    - cron:  '*/5 * * * *'
-  workflow_dispatch:  # 允许手动触发
+    # UTC 时区 每5分钟执行一次
+    - cron: '*/5 * * * *'
+  # 支持手动点按钮触发调试
+  workflow_dispatch:
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping HF Space
+      - name: Ping HF Space to prevent sleep
         run: |
+          # 优先调用ping接口
           curl -fsS https://keawqe-ac.hf.space/api/ping \
             --max-time 10 \
             -o /dev/null \
-            -w "HTTP %{http_code} in %{time_total}s\n" \
-            || curl -fsS https://keawqe-ac.hf.space \
-                     --max-time 10 \
-                     -o /dev/null \
-                     -w "Fallback HTTP %{http_code} in %{time_total}s\n"
+            -w "Primary ping HTTP %{http_code}, cost %{time_total}s\n" \
+          || \
+          # 接口失败则访问主页兜底保活
+          curl -fsS https://keawqe-ac.hf.space \
+            --max-time 10 \
+            -o /dev/null \
+            -w "Fallback ping HTTP %{http_code}, cost %{time_total}s\n"
