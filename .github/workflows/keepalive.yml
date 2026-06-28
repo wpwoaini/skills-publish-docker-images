@@ -2,16 +2,16 @@ name: Keep HF Space Alive
 
 on:
   schedule:
-    - cron: '*/5 * * * *'   # 每 5 分钟执行一次
-  workflow_dispatch:        # 允许手动触发测试
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
 
 jobs:
   ping:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: 🟢 Ping Hugging Face Space
+      - name: Ping HF Space
         run: |
-          echo "🔄 正在访问: https://keawqe-ac.hf.space/"
-          curl -I -L -m 30 -A "GitHub-KeepAlive/1.0" https://keawqe-ac.hf.space/ || true
-          echo "✅ 访问完成"
+          echo "🕒 北京时间: $(date -u +'%Y-%m-%d %H:%M:%S' -d '+8 hours')"
+          echo "🔗 正在访问 https://keawqe-ac.hf.space/"
+          curl -I -L -m 25 -A "GitHub-KeepAlive" https://keawqe-ac.hf.space/ || true
+          echo "✅ 本次执行完成"
